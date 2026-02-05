@@ -1,0 +1,15 @@
+{
+  "domain": "flybat_bms_ble",
+  "name": "FlyBat BLE BMS",
+  "version": "1.0.0",
+  "dependencies": [
+    "esp32_ble_tracker",
+    "ble_client"
+  ],
+  "files": [
+    "flybat_bms_ble.h",
+    "flybat_bms_ble.cpp",
+    "component.py",
+    "__init__.py"
+  ]
+}
