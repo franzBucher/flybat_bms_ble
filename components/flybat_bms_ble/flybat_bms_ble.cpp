@@ -38,10 +38,41 @@ void FlyBatBmsBle::gattc_event_handler(
       ESP_LOGI(TAG, "Service discovery complete");
       break;
 
-    case ESP_GATTC_NOTIFY_EVT:
-      ESP_LOGD(TAG, "Notify received (%d bytes)", param->notify.value_len);
-      // Parser kommt im nächsten Schritt
+    case ESP_GATTC_SEARCH_CMPL_EVT: {
+      ESP_LOGI(TAG, "Service discovery complete");
+    
+      auto *chr = this->parent()->get_characteristic(SERVICE_UUID, NOTIFY_UUID);
+      if (chr == nullptr) {
+        ESP_LOGE(TAG, "Notify characteristic not found");
+        return;
+      }
+    
+      notify_handle_ = chr->handle;
+      ESP_LOGI(TAG, "Notify handle: 0x%04X", notify_handle_);
+    
+      esp_ble_gattc_register_for_notify(
+          gattc_if,
+          this->parent()->get_remote_bda(),
+          notify_handle_);
+
       break;
+
+    case ESP_GATTC_REG_FOR_NOTIFY_EVT: {
+        uint16_t notify_en = 1;
+        esp_ble_gattc_write_char_descr(
+            gattc_if,
+            param->reg_for_notify.conn_id,
+            param->reg_for_notify.handle + 1,  // CCCD
+            sizeof(notify_en),
+            (uint8_t *)&notify_en,
+            ESP_GATT_WRITE_TYPE_RSP,
+            ESP_GATT_AUTH_REQ_NONE);
+      
+        ESP_LOGI(TAG, "Notifications enabled");
+        break;
+}
+
+}
 
     default:
       break;
@@ -50,4 +81,5 @@ void FlyBatBmsBle::gattc_event_handler(
 
 }  // namespace flybat_bms_ble
 }  // namespace esphome
+
 
