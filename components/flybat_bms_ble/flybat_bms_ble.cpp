@@ -6,6 +6,18 @@ namespace flybat_bms_ble {
 
 static const char *TAG = "flybat_bms_ble";
 
+static const esp_bt_uuid_t SERVICE_UUID = {
+  .len = ESP_UUID_LEN_128,
+  .uuid = {.uuid128 = {0xFB,0x34,0x9B,0x5F,0x80,0x00,0x00,0x80,0x00,0x10,0x00,0x00,0xFF,0xE0,0x00,0x00}}
+};
+
+static const esp_bt_uuid_t NOTIFY_UUID = {
+  .len = ESP_UUID_LEN_128,
+  .uuid = {.uuid128 = {0xFB,0x34,0x9B,0x5F,0x80,0x00,0x00,0x80,0x00,0x10,0x00,0x00,0xFF,0xE1,0x00,0x00}}
+};
+
+
+
 void FlyBatBmsBle::gattc_event_handler(
     esp_gattc_cb_event_t event,
     esp_gatt_if_t gattc_if,
@@ -38,3 +50,4 @@ void FlyBatBmsBle::gattc_event_handler(
 
 }  // namespace flybat_bms_ble
 }  // namespace esphome
+
