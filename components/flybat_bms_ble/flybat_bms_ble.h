@@ -29,7 +29,15 @@ class FlyBatBmsBle : public Component, public ble_client::BLEClientNode {
   sensor::Sensor *cell5_{nullptr};
   sensor::Sensor *voltage_{nullptr};
 
+protected:
   uint16_t notify_handle_{0};
+  esp_gatt_if_t gattc_if_{0};
+  uint16_t conn_id_{0};
+  uint16_t service_start_{0};
+  uint16_t service_end_{0};
+  uint16_t rx_handle_{0};
+
+
 };
 
 }  // namespace flybat_bms_ble
